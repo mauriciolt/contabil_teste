@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.mauricio.contabil.domain.Categoria;
 import com.mauricio.contabil.repository.CategoriaRepository;
+import com.mauricio.contabil.service.exceptions.ObjetoNaoEncontradoException;
 
 @Service
 public class CategoriaService {
@@ -16,6 +17,6 @@ public class CategoriaService {
 	
 	public Categoria find(Integer id) {
 		Optional<Categoria> obj = repo.findById(id);
-		return obj.orElse(null);
+		return obj.orElseThrow( () -> new ObjetoNaoEncontradoException( "Objeto não encontrado. ID: " + id + ", Tipo: " + Categoria.class.getName()));
 	}
 }
