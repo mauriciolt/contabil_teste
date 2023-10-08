@@ -9,12 +9,16 @@ import org.springframework.stereotype.Component;
 
 import com.mauricio.contabil.domain.Cadastro;
 import com.mauricio.contabil.domain.Categoria;
+import com.mauricio.contabil.domain.Cidade;
 import com.mauricio.contabil.domain.ClasseCad;
+import com.mauricio.contabil.domain.Estado;
 import com.mauricio.contabil.domain.Produto;
 import com.mauricio.contabil.domain.TipoCad;
 import com.mauricio.contabil.repository.CadastroRepository;
 import com.mauricio.contabil.repository.CategoriaRepository;
+import com.mauricio.contabil.repository.CidadeRepository;
 import com.mauricio.contabil.repository.ClasseCadRepository;
+import com.mauricio.contabil.repository.EstadoRepository;
 import com.mauricio.contabil.repository.ProdutoRepository;
 import com.mauricio.contabil.repository.TipoCadRepository;
 
@@ -35,6 +39,12 @@ public class PopulaDados {
 	
 	@Autowired
 	CadastroRepository cadastroRepository;
+	
+	@Autowired
+	EstadoRepository estadoRepository;
+	
+	@Autowired
+	CidadeRepository cidadeRepository;
 	
 	
 	@PostConstruct //somente utilizar em bd virtual
@@ -76,6 +86,19 @@ public void cadastrar()  {
 		classecadRepository.saveAll(Arrays.asList(classecad1, classecad2, classecad3));
 		
 		cadastroRepository.saveAll(Arrays.asList(cad1, cad2, cad3));
+		
+		Estado est1 = new Estado(null, "Minas Gerais");
+		Estado est2 = new Estado(null, "São Paulo");
+		
+		Cidade c1 = new Cidade(null, "Belo Horizonte", est1);
+		Cidade c2 = new Cidade(null, "Capelinha", est1);
+		Cidade c3 = new Cidade(null, "São Paulo", est2);
+		
+		est1.getCidades().addAll(Arrays.asList(c1, c2));
+		est2.getCidades().addAll(Arrays.asList(c3));
+		
+		estadoRepository.saveAll(Arrays.asList(est1, est2));
+		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 		
 }
 }
