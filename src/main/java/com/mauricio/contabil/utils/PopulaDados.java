@@ -1,5 +1,8 @@
 package com.mauricio.contabil.utils;
 
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
@@ -15,16 +18,23 @@ import com.mauricio.contabil.domain.Cliente;
 import com.mauricio.contabil.domain.Endereco;
 import com.mauricio.contabil.domain.Estado;
 import com.mauricio.contabil.domain.Funcionario;
+import com.mauricio.contabil.domain.PagCartao;
+import com.mauricio.contabil.domain.PagPix;
+import com.mauricio.contabil.domain.Pagamento;
 import com.mauricio.contabil.domain.Produto;
+import com.mauricio.contabil.domain.Servico;
 import com.mauricio.contabil.domain.TipoCad;
+import com.mauricio.contabil.domain.enums.SituacaoPagamento;
 import com.mauricio.contabil.repository.CadastroRepository;
 import com.mauricio.contabil.repository.CategoriaRepository;
 import com.mauricio.contabil.repository.CidadeRepository;
 import com.mauricio.contabil.repository.ClasseCadRepository;
 import com.mauricio.contabil.repository.EnderecoRepository;
 import com.mauricio.contabil.repository.EstadoRepository;
+import com.mauricio.contabil.repository.PagamentoRepository;
 import com.mauricio.contabil.repository.PessoaRepository;
 import com.mauricio.contabil.repository.ProdutoRepository;
+import com.mauricio.contabil.repository.ServicoRepository;
 import com.mauricio.contabil.repository.TipoCadRepository;
 
 @Component
@@ -57,9 +67,15 @@ public class PopulaDados {
 	@Autowired
 	EnderecoRepository enderecoRepository;
 	
+	@Autowired
+	ServicoRepository servicoRepository;
+	
+	@Autowired
+	PagamentoRepository pagamentoRepository;
+	
 	
 	@PostConstruct //somente utilizar em bd virtual
-public void cadastrar()  {
+public void cadastrar() throws ParseException  {
 		
 		Categoria cat1 = new Categoria(null, "Serviço");
 		Categoria cat2 = new Categoria(null, "Orçamento");
@@ -124,5 +140,28 @@ public void cadastrar()  {
 		
 		pessoaRepository.saveAll(Arrays.asList(clt1, fnc1));
 		enderecoRepository.saveAll(Arrays.asList(end1, end2, end3));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		Servico srv1 = new Servico(null, sdf.parse("02/09/2021 09:00"), sdf.parse("02/09/2021 12:00"), "Tosa", clt1, fnc1);
+		Servico srv2 = new Servico(null, sdf.parse("03/09/2021 12:00"), sdf.parse("04/09/2021 12:00"), "Hotel", clt1, fnc1);
+
+		
+		Pagamento pgt1 = new PagCartao(null, 60.00, SituacaoPagamento.QUITADO,srv2, 6);
+		srv2.setPagamento(pgt1);
+		
+		Pagamento pgt2 = new PagPix(null, 100.0, SituacaoPagamento.PENDENTE, srv1,  sdf.parse("02/09/2021 00:00"), null);
+		srv1.setPagamento(pgt2);
+		
+		
+		
+
+		
+		clt1.getServicos().addAll(Arrays.asList(srv1, srv2));
+		fnc1.getServicos().addAll(Arrays.asList(srv1, srv2));
+		
+		servicoRepository.saveAll(Arrays.asList(srv1, srv2));
+		pagamentoRepository.saveAll(Arrays.asList(pgt1, pgt2));
+		
 }
 }
