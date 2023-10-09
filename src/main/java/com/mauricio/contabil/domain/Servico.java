@@ -1,7 +1,9 @@
 package com.mauricio.contabil.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -9,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
@@ -36,14 +40,24 @@ public class Servico implements Serializable {
 	@JoinColumn(name = "id_funcionario")
 	private Funcionario funcionario;
 	
+	@ManyToOne
+	@JoinColumn(name = "id_cadastro")
+	private Cadastro cadastro;
+	
+	@ManyToMany
+	@JoinTable(name = "SERVICO_PRODUTO", joinColumns = @JoinColumn(name = "id_servico"), inverseJoinColumns = @JoinColumn(name = "id_produto"))
+	private List<Produto> produtos = new ArrayList<>();
 	
 	
 	
+	
+
+
 public Servico() {
 		
 	}
 
-public Servico(Integer id, Date dataEntrada, Date dataSaida, String descricao, Cliente cliente, Funcionario funcionario) {
+public Servico(Integer id, Date dataEntrada, Date dataSaida, String descricao, Cliente cliente, Funcionario funcionario, Cadastro cadastro) {
 	super();
 	this.id = id;
 	this.dataEntrada = dataEntrada;
@@ -52,6 +66,7 @@ public Servico(Integer id, Date dataEntrada, Date dataSaida, String descricao, C
 //	this.pagamento = pagamento;
 	this.cliente = cliente;
 	this.funcionario = funcionario;
+	this.cadastro = cadastro;
 }
 
 @Override
@@ -119,7 +134,37 @@ public void setPagamento(Pagamento pagamento) {
 	this.pagamento = pagamento;
 }
 
+public Cadastro getCadastro() {
+	return cadastro;
+}
 
+public void setCadastro(Cadastro cadastro) {
+	this.cadastro = cadastro;
+}
+
+public Cliente getCliente() {
+	return cliente;
+}
+
+public void setCliente(Cliente cliente) {
+	this.cliente = cliente;
+}
+
+public Funcionario getFuncionario() {
+	return funcionario;
+}
+
+public void setFuncionario(Funcionario funcionario) {
+	this.funcionario = funcionario;
+}
+
+public List<Produto> getProdutos() {
+	return produtos;
+}
+
+public void setProdutos(List<Produto> produtos) {
+	this.produtos = produtos;
+}
 
 
 }

@@ -1,6 +1,8 @@
 package com.mauricio.contabil.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 
 
@@ -39,6 +42,11 @@ public class Cadastro implements Serializable {
 	@ManyToOne
 	@JoinColumn (name = "id_classecad")
 	private ClasseCad classecad; //fisica, mei ou simples nacional
+	
+	@OneToMany(mappedBy = "cadastro")
+	private List<Servico> servicos = new ArrayList<>();
+	
+	
 	
 	public Cadastro () { 
 		
