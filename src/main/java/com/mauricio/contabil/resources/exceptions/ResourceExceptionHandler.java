@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-
+import com.mauricio.contabil.service.exceptions.DataIntegrityException;
 import com.mauricio.contabil.service.exceptions.ObjetoNaoEncontradoException;
 
 @ControllerAdvice
@@ -22,6 +22,12 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);		
 	}
 	
+	@ExceptionHandler(DataIntegrityException.class)
+	public ResponseEntity<StandardError> objectNotFound(DataIntegrityException e, HttpServletRequest request){
+		
+		StandardError erro = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage()); 
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);		
+	}
 	
 	
 }
