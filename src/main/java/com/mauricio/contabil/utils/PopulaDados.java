@@ -5,7 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
-import javax.annotation.PostConstruct;
+//import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -74,7 +74,7 @@ public class PopulaDados {
 	PagamentoRepository pagamentoRepository;
 	
 	
-	@PostConstruct //somente utilizar em bd virtual
+//	@PostConstruct //somente utilizar em bd virtual
 public void cadastrar() throws ParseException  {
 		
 		Categoria cat1 = new Categoria(null, "Serviço");
